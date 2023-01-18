@@ -1,61 +1,46 @@
 // The Setup: countTimesRan * 100
 {
   let count = 0;
-  function countTimesRan() {
-    console.log(`countTimesRan has run ${++count} times!`);
+  function countTimesRan(label='countTimesRan') {
+    console.log(`${label} has run ${++count} times!`);
+  }
+
+  function maybeRun(probability, func) {
+    if (Math.random() < probability) {
+      return func();
+    };
   }
 
   for (let i = 0; i < 100; i++) {
-    countTimesRan();
+    maybeRun(0.9, countTimesRan);
   }
 }
 
-// if Math.random()...
+
+// Passing arguments to countTimesRan
 {
   let count = 0;
-  function countTimesRan() {
-    console.log(`countTimesRan has run ${++count} times!`);
+  function countTimesRan(label='countTimesRan') {
+    console.log(`${label} has run ${++count} times!`);
+  }
+
+  function maybeRun(probability, func, args) {
+    if (Math.random() < probability) {
+      return func(...args);
+    };
   }
 
   for (let i = 0; i < 100; i++) {
-    if (Math.random() < 0.1) {
-      countTimesRan();
-    }
+    maybeRun(0.9, () => countTimesRan('maybeRun arrow'));
+    maybeRun(0.9, function() { countTimesRan('maybeRun function keyword') });
+    maybeRun(0.9, countTimesRan, ['maybeRun with array args']);
   }
 }
 
 
-// shouldRun: It would be much nicer in a function
-{
-  let count = 0;
-  function countTimesRan() {
-    console.log(`countTimesRan has run ${++count} times!`);
-  }
-
-  function shouldRun() { return Math.random() < 0.1 }
-
-  for (let i = 0; i < 100; i++) {
-    if (shouldRun()) {
-      countTimesRan();
-    }
-  }
+const myObj = {
+  favoriteFunction: countTimesRan
 }
 
 
-// maybeRun: There's the callback
-{
-  let count = 0;
-  function countTimesRan() {
-    console.log(`countTimesRan has run ${++count} times!`);
-  }
-
-  function maybeRun(fn) {
-    if (Math.random < 0.1) {
-      fn();
-    }
-  }
-
-  for (let i = 0; i < 100; i++) {
-    maybeRun(countTimesRan);
-  }
-}
+myObj.favoriteFunction('obj version');
